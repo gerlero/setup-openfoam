@@ -1,0 +1,36 @@
+name: Setup OpenFOAM
+description: Set up a specific version of OpenFOAM
+inputs:
+  openfoam-version:
+    description: Version of OpenFOAM to set up
+runs:
+  using: "composite"
+  steps:
+    - run: |
+        if [ $(uname) == "Darwin" ]; then
+          brew install --no-quarantine gerlero/openfoam/openfoam@${{ inputs.openfoam-version }}
+          source /Applications/OpenFOAM-v${{ inputs.openfoam-version }}.app/Contents/Resources/etc/bashrc || true
+        elif [ ${{ inputs.openfoam-version }} -lt 1000 ]; then
+          sudo sh -c "wget -O - https://dl.openfoam.org/gpg.key > /etc/apt/trusted.gpg.d/openfoam.asc"
+          sudo add-apt-repository http://dl.openfoam.org/ubuntu
+          sudo apt update
+          sudo apt -y install openfoam${{ inputs.openfoam-version }}
+          source /opt/openfoam${{ inputs.openfoam-version }}/etc/bashrc || true
+        else
+          curl -s https://dl.openfoam.com/add-debian-repo.sh | sudo bash
+          sudo apt-get install openfoam${{ inputs.openfoam-version }}-default
+          source /usr/lib/openfoam/openfoam${{ inputs.openfoam-version }}/etc/bashrc || true
+        fi
+
+        for var in "${!WM_@}"; do
+          echo "$var=${!var}" >> $GITHUB_ENV
+        done
+
+        for var in "${!FOAM_@}"; do
+          echo "$var=${!var}" >> $GITHUB_ENV
+        done
+
+        echo LD_LIBRARY_PATH="$LD_LIBRARY_PATH" >> $GITHUB_ENV
+
+        echo "$PATH" >> $GITHUB_PATH
+      shell: bash
