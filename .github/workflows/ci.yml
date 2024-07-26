@@ -128,3 +128,6 @@ jobs:
         openfoam-version: ${{ matrix.openfoam-version }}
     - name: Run icoFoam -help
       run: icoFoam -help
+    - name: Regression test
+      run: |
+        source $WM_DIR/scripts/AllwmakeParseArguments
