@@ -6,6 +6,9 @@ inputs:
   cache:
     description: Whether to cache the OpenFOAM installation for future runs
     default: true
+branding:
+  icon: grid
+  color: blue
 runs:
   using: "composite"
   steps:
