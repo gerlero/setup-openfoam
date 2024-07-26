@@ -3,34 +3,71 @@ description: Set up a specific version of OpenFOAM
 inputs:
   openfoam-version:
     description: Version of OpenFOAM to set up
+  cache:
+    description: Whether to cache the OpenFOAM installation for future runs
+    default: true
 runs:
   using: "composite"
   steps:
-    - run: |
+    - name: Prepare for install
+      id: prep
+      run: |
         if [ $(uname) == "Darwin" ]; then
-          brew install --no-quarantine gerlero/openfoam/openfoam@${{ inputs.openfoam-version }}
-          source /Applications/OpenFOAM-v${{ inputs.openfoam-version }}.app/Contents/Resources/etc/bashrc || true
+          echo "openfoam-flavor=com" >> "$GITHUB_OUTPUT"
+          echo "openfoam-bashrc=/Applications/OpenFOAM-v${{ inputs.openfoam-version }}.app/Contents/Resources/etc/bashrc" >> "$GITHUB_OUTPUT"
         elif [ ${{ inputs.openfoam-version }} -lt 1000 ]; then
+          echo "openfoam-flavor=org" >> "$GITHUB_OUTPUT"
           sudo sh -c "wget -O - https://dl.openfoam.org/gpg.key > /etc/apt/trusted.gpg.d/openfoam.asc"
           sudo add-apt-repository http://dl.openfoam.org/ubuntu
           sudo apt update
-          sudo apt -y install openfoam${{ inputs.openfoam-version }}
-          source /opt/openfoam${{ inputs.openfoam-version }}/etc/bashrc || true
+          echo "apt-package=openfoam${{ inputs.openfoam-version }}" >> $GITHUB_OUTPUT
+          echo "openfoam-bashrc=/opt/openfoam${{ inputs.openfoam-version }}/etc/bashrc" >> "$GITHUB_OUTPUT"
         else
+          echo "openfoam-flavor=com" >> "$GITHUB_OUTPUT"
           curl -s https://dl.openfoam.com/add-debian-repo.sh | sudo bash
-          sudo apt-get install openfoam${{ inputs.openfoam-version }}-default
-          source /usr/lib/openfoam/openfoam${{ inputs.openfoam-version }}/etc/bashrc || true
+          echo "apt-package=openfoam${{ inputs.openfoam-version }}-default" >> "$GITHUB_OUTPUT"
+          echo "openfoam-bashrc=/usr/lib/openfoam/openfoam${{ inputs.openfoam-version }}/etc/bashrc" >> "$GITHUB_OUTPUT"
         fi
+      shell: bash
+    - name: Get OS version
+      uses: sersoft-gmbh/os-version-action@v3
+      id: os-version
+    - name: Install OpenFOAM on Linux
+      if: steps.prep.outputs.apt-package && inputs.cache && steps.prep.outputs.openfoam-flavor == 'com'
+      uses: awalsh128/cache-apt-pkgs-action@v1
+      with:
+        packages: ${{ steps.prep.outputs.apt-package }}
+        version: ${{ steps.os-version.outputs.version }}
+    - name: Install OpenFOAM on Linux (without caching)
+      if: steps.prep.outputs.apt-package && (!inputs.cache || steps.prep.outputs.openfoam-flavor != 'com')
+      run: |
+        sudo apt-get install -y ${{ steps.prep.outputs.apt-package }}
+      shell: bash
+    - name: Cache OpenFOAM on macOS
+      if: runner.os == 'macOS' && inputs.cache
+      id: cache-macos
+      uses: actions/cache@v4
+      with:
+        key: setup-openfoam-${{ inputs.openfoam-version }}-${{ runner.os }}-${{ steps.os-version.outputs.version }}-${{ runner.arch }}
+        path: /Applications/OpenFOAM-v${{ inputs.openfoam-version }}.app
+    - name: Install OpenFOAM on macOS
+      if: runner.os == 'macOS' && steps.cache-macos.outputs.cache-hit != 'true'
+      run: |
+        brew install --no-quarantine gerlero/openfoam/openfoam@${{ inputs.openfoam-version }}
+      shell: bash
+    - name: Activate OpenFOAM for future steps
+      run: |
+        source "${{ steps.prep.outputs.openfoam-bashrc }}" || true
 
         for var in "${!WM_@}"; do
-          echo "$var=${!var}" >> $GITHUB_ENV
+          echo "$var=${!var}" >> "$GITHUB_ENV"
         done
 
         for var in "${!FOAM_@}"; do
-          echo "$var=${!var}" >> $GITHUB_ENV
+          echo "$var=${!var}" >> "$GITHUB_ENV"
         done
 
-        echo LD_LIBRARY_PATH="$LD_LIBRARY_PATH" >> $GITHUB_ENV
+        echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH" >> "$GITHUB_ENV"
 
-        echo "$PATH" >> $GITHUB_PATH
+        echo "$PATH" >> "$GITHUB_PATH"
       shell: bash
