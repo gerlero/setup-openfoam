@@ -122,12 +122,16 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
-    - name: Setup OpenFOAM
+    - name: Set up OpenFOAM
       uses: ./
       with:
         openfoam-version: ${{ matrix.openfoam-version }}
     - name: Run icoFoam -help
       run: icoFoam -help
-    - name: Regression test
+    - name: Test shell session
+      if: matrix.openfoam-version >= 1000
       run: |
-        source $WM_DIR/scripts/AllwmakeParseArguments
+        openfoam -help
+        openfoam${{ matrix.openfoam-version }} -help
+    - name: Regression test
+      run: source $WM_DIR/scripts/AllwmakeParseArguments
