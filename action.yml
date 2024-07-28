@@ -35,8 +35,13 @@ runs:
     - name: Get OS version
       uses: sersoft-gmbh/os-version-action@v3
       id: os-version
+    - name: Install OpenFOAM on Linux (with caching)
+      if: steps.prep.outputs.apt-package && inputs.cache
+      uses: eth-pkg/apt-deb-cache@v0.2.4
+      with:
+        packages: ${{ steps.prep.outputs.apt-package }}
     - name: Install OpenFOAM on Linux (without caching)
-      if: steps.prep.outputs.apt-package
+      if: steps.prep.outputs.apt-package && !inputs.cache
       run: |
         sudo apt-get install -y ${{ steps.prep.outputs.apt-package }}
       shell: bash
