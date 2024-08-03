@@ -59,6 +59,7 @@ runs:
       shell: bash
     - name: Activate OpenFOAM for future steps
       run: |
+        OLD_PATH="$PATH"
         source "${{ steps.prep.outputs.openfoam-bashrc }}" || true
 
         for var in "${!WM_@}"; do
@@ -71,7 +72,7 @@ runs:
 
         echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH" >> "$GITHUB_ENV"
 
-        echo "$PATH" >> "$GITHUB_PATH"
+        echo "${PATH/%:$OLD_PATH}" >> "$GITHUB_PATH"
       shell: bash
     - name: Add shell session commands to PATH
       if: steps.prep.outputs.openfoam-flavor == 'com'
