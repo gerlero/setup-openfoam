@@ -37,7 +37,7 @@ runs:
       id: os-version
     - name: Install OpenFOAM on Linux (with caching)
       if: steps.prep.outputs.apt-package && inputs.cache
-      uses: eth-pkg/apt-deb-cache@v0.2.4
+      uses: eth-pkg/apt-deb-cache@v0.2.5
       with:
         packages: ${{ steps.prep.outputs.apt-package }}
     - name: Install OpenFOAM on Linux (without caching)
