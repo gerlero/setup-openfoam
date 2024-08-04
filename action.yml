@@ -16,25 +16,21 @@ runs:
       id: prep
       run: |
         if [ $(uname) == "Darwin" ]; then
-          echo "openfoam-distro=com" >> "$GITHUB_OUTPUT"
           echo "openfoam-bashrc=/Applications/OpenFOAM-v${{ inputs.openfoam-version }}.app/Contents/Resources/etc/bashrc" >> "$GITHUB_OUTPUT"
+          echo "openfoam-shell=/Applications/OpenFOAM-v${{ inputs.openfoam-version }}.app/Contents/Resources/etc/openfoam" >> "$GITHUB_OUTPUT"
         elif [ ${{ inputs.openfoam-version }} -lt 1000 ]; then
-          echo "openfoam-distro=org" >> "$GITHUB_OUTPUT"
           sudo sh -c "wget -O - https://dl.openfoam.org/gpg.key > /etc/apt/trusted.gpg.d/openfoam.asc"
           sudo add-apt-repository http://dl.openfoam.org/ubuntu
           sudo apt update
           echo "apt-package=openfoam${{ inputs.openfoam-version }}" >> $GITHUB_OUTPUT
           echo "openfoam-bashrc=/opt/openfoam${{ inputs.openfoam-version }}/etc/bashrc" >> "$GITHUB_OUTPUT"
         else
-          echo "openfoam-distro=com" >> "$GITHUB_OUTPUT"
           curl -s https://dl.openfoam.com/add-debian-repo.sh | sudo bash
           echo "apt-package=openfoam${{ inputs.openfoam-version }}-default" >> "$GITHUB_OUTPUT"
           echo "openfoam-bashrc=/usr/lib/openfoam/openfoam${{ inputs.openfoam-version }}/etc/bashrc" >> "$GITHUB_OUTPUT"
+          echo "openfoam-shell=/usr/lib/openfoam/openfoam${{ inputs.openfoam-version }}/etc/openfoam" >> "$GITHUB_OUTPUT"
         fi
       shell: bash
-    - name: Get OS version
-      uses: sersoft-gmbh/os-version-action@v3
-      id: os-version
     - name: Install OpenFOAM on Linux (with caching)
       if: steps.prep.outputs.apt-package && inputs.cache
       uses: eth-pkg/apt-deb-cache@v0.2.5
@@ -45,6 +41,10 @@ runs:
       run: |
         sudo apt-get install -y ${{ steps.prep.outputs.apt-package }}
       shell: bash
+    - name: Get OS version
+      if: runner.os == 'macOS' && inputs.cache
+      id: os-version
+      uses: sersoft-gmbh/os-version-action@v3
     - name: Cache OpenFOAM on macOS
       if: runner.os == 'macOS' && inputs.cache
       id: cache-macos
@@ -75,12 +75,10 @@ runs:
         echo "${PATH/%:$OLD_PATH}" >> "$GITHUB_PATH"
       shell: bash
     - name: Add shell session commands to PATH
-      if: steps.prep.outputs.openfoam-distro == 'com'
+      if: steps.prep.outputs.openfoam-shell
       run: |
-        source "${{ steps.prep.outputs.openfoam-bashrc }}" || true
-
         mkdir -p ~/.setup-openfoam/bin
-        ln -s "$FOAM_ETC/openfoam" ~/.setup-openfoam/bin/openfoam${{ inputs.openfoam-version }}
-        ln -s "$FOAM_ETC/openfoam" ~/.setup-openfoam/bin/openfoam
+        ln -s "${{ steps.prep.outputs.openfoam-shell }}" ~/.setup-openfoam/bin/openfoam${{ inputs.openfoam-version }}
+        ln -s "${{ steps.prep.outputs.openfoam-shell }}" ~/.setup-openfoam/bin/openfoam
         echo ~/.setup-openfoam/bin >> "$GITHUB_PATH"
       shell: bash
