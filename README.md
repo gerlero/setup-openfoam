@@ -1,6 +1,7 @@
 # setup-openfoam
 
 [![CI](https://github.com/gerlero/setup-openfoam/actions/workflows/ci.yml/badge.svg)](https://github.com/gerlero/setup-openfoam/actions/workflows/ci.yml)
+![OpenFOAM](https://img.shields.io/badge/openfoam-.com%20|%20.org-informational)
 
 Installs and activates a specific version of OpenFOAM in the GitHub Actions environment.
 
