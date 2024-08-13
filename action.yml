@@ -19,27 +19,48 @@ runs:
           echo "openfoam-bashrc=/Applications/OpenFOAM-v${{ inputs.openfoam-version }}.app/Contents/Resources/etc/bashrc" >> "$GITHUB_OUTPUT"
           echo "openfoam-shell=/Applications/OpenFOAM-v${{ inputs.openfoam-version }}.app/Contents/Resources/etc/openfoam" >> "$GITHUB_OUTPUT"
         elif [ ${{ inputs.openfoam-version }} -lt 1000 ]; then
-          sudo sh -c "wget -O - https://dl.openfoam.org/gpg.key > /etc/apt/trusted.gpg.d/openfoam.asc"
-          sudo add-apt-repository http://dl.openfoam.org/ubuntu
-          sudo apt update
+          export DEBIAN_FRONTEND=noninteractive
+          if [ $(id -u) -eq 0 ]; then
+            apt-get install -y wget software-properties-common || apt update && apt-get install -y wget software-properties-common
+            sh -c "wget -O - https://dl.openfoam.org/gpg.key > /etc/apt/trusted.gpg.d/openfoam.asc"
+            add-apt-repository http://dl.openfoam.org/ubuntu
+            apt update
+          else
+            sudo apt-get install -y wget software-properties-common || sudo apt update && sudo apt-get install -y wget software-properties-common
+            sudo sh -c "wget -O - https://dl.openfoam.org/gpg.key > /etc/apt/trusted.gpg.d/openfoam.asc"
+            sudo add-apt-repository http://dl.openfoam.org/ubuntu
+            sudo apt update
+          fi
           echo "apt-package=openfoam${{ inputs.openfoam-version }}" >> $GITHUB_OUTPUT
           echo "openfoam-bashrc=/opt/openfoam${{ inputs.openfoam-version }}/etc/bashrc" >> "$GITHUB_OUTPUT"
         else
-          curl -s https://dl.openfoam.com/add-debian-repo.sh | sudo bash
+          export DEBIAN_FRONTEND=noninteractive
+          if [ $(id -u) -eq 0 ]; then
+            sudo apt-get install -y curl || apt update && apt-get install -y curl
+            curl -s https://dl.openfoam.com/add-debian-repo.sh | bash
+          else
+            sudo apt-get install -y curl || sudo apt update && sudo apt-get install -y curl
+            curl -s https://dl.openfoam.com/add-debian-repo.sh | sudo bash
+          fi
           echo "apt-package=openfoam${{ inputs.openfoam-version }}-default" >> "$GITHUB_OUTPUT"
           echo "openfoam-bashrc=/usr/lib/openfoam/openfoam${{ inputs.openfoam-version }}/etc/bashrc" >> "$GITHUB_OUTPUT"
           echo "openfoam-shell=/usr/lib/openfoam/openfoam${{ inputs.openfoam-version }}/etc/openfoam" >> "$GITHUB_OUTPUT"
         fi
       shell: bash
     - name: Install OpenFOAM on Linux (with caching)
-      if: steps.prep.outputs.apt-package && inputs.cache
+      if: steps.prep.outputs.apt-package && inputs.cache && !job.container
       uses: eth-pkg/apt-deb-cache@v0.2.5
       with:
         packages: ${{ steps.prep.outputs.apt-package }}
     - name: Install OpenFOAM on Linux (without caching)
-      if: steps.prep.outputs.apt-package && !inputs.cache
+      if: steps.prep.outputs.apt-package && (!inputs.cache || job.container)
       run: |
-        sudo apt-get install -y ${{ steps.prep.outputs.apt-package }}
+        export DEBIAN_FRONTEND=noninteractive
+        if [ $(id -u) -eq 0 ]; then
+          apt-get install -y ${{ steps.prep.outputs.apt-package }}
+        else
+          sudo apt-get install -y ${{ steps.prep.outputs.apt-package }}
+        fi
       shell: bash
     - name: Get OS version
       if: runner.os == 'macOS' && inputs.cache

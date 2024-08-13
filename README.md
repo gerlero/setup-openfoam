@@ -27,4 +27,16 @@ steps:
 
 - **`macos-14`**, **`macos-13`**, **`macos-12`**: 2406, 2312, 2306, 2212, 2206, 2112 (via [OpenFOAM.app](https://github.com/gerlero/openfoam-app))
 
-- Windows, Docker: not supported
+- [Docker `container`](https://docs.github.com/en/actions/writing-workflows/choosing-where-your-workflow-runs/running-jobs-in-a-container) based on:
+
+  - `ubuntu:24.04`: 2406, 2312 (openfoam.com), 12, 11 (openfoam.org)
+
+  - `ubuntu:22.04`: 2406, 2312, 2306, 2212, 2206, 2112, 2106, 2012, 2006 (openfoam.com), 12, 11, 10, 9 (openfoam.org)
+
+  - `ubuntu:20.04`: 2406, 2312, 2306, 2212, 2206, 2112, 2106, 2012, 2006 (openfoam.com), 12, 11, 10, 9, 8, 7 (openfoam.org)
+
+  - `debian:bookworm`: 2406, 2312, 2306, 2212, 2206, 2112, 2106, 2006 (openfoam.com)
+
+  - `debian:bullseye`: 2406, 2312, 2306, 2212, 2206, 2112, 2106, 2012, 2006 (openfoam.com)
+
+- Windows: not supported

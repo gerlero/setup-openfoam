@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  ci:
+  bare:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -135,3 +135,101 @@ jobs:
         openfoam${{ matrix.openfoam-version }} -help
     - name: Regression test
       run: source $WM_DIR/scripts/AllwmakeParseArguments
+
+  container:
+    runs-on: ubuntu-latest
+    container: ${{ matrix.container }}
+    strategy:
+      fail-fast: false
+      matrix:
+        openfoam-version:
+          - 2406
+          - 2312
+          - 2306
+          - 2212
+          - 2206
+          - 2112
+          - 2106
+          - 2012
+          - 2006
+          - 12
+          - 11
+          - 10
+          - 9
+          - 8
+          - 7
+        container:
+          - ubuntu:24.04
+          - ubuntu:22.04
+          - ubuntu:20.04
+          - debian:bookworm
+          - debian:bullseye
+        exclude:
+          - container: ubuntu:24.04
+            openfoam-version: 2306
+          - container: ubuntu:24.04
+            openfoam-version: 2212
+          - container: ubuntu:24.04
+            openfoam-version: 2206
+          - container: ubuntu:24.04
+            openfoam-version: 2112
+          - container: ubuntu:24.04
+            openfoam-version: 2106
+          - container: ubuntu:24.04
+            openfoam-version: 2012
+          - container: ubuntu:24.04
+            openfoam-version: 2006
+          - container: ubuntu:24.04
+            openfoam-version: 10
+          - container: ubuntu:24.04
+            openfoam-version: 9
+          - container: ubuntu:24.04
+            openfoam-version: 8
+          - container: ubuntu:24.04
+            openfoam-version: 7
+          - container: ubuntu:22.04
+            openfoam-version: 8
+          - container: ubuntu:22.04
+            openfoam-version: 7
+          - container: debian:bookworm
+            openfoam-version: 2012
+          - container: debian:bookworm
+            openfoam-version: 12
+          - container: debian:bookworm
+            openfoam-version: 11
+          - container: debian:bookworm
+            openfoam-version: 10
+          - container: debian:bookworm
+            openfoam-version: 9
+          - container: debian:bookworm
+            openfoam-version: 8
+          - container: debian:bookworm
+            openfoam-version: 7
+          - container: debian:bullseye
+            openfoam-version: 12
+          - container: debian:bullseye
+            openfoam-version: 11
+          - container: debian:bullseye
+            openfoam-version: 10
+          - container: debian:bullseye
+            openfoam-version: 9
+          - container: debian:bullseye
+            openfoam-version: 8
+          - container: debian:bullseye
+            openfoam-version: 7
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Set up OpenFOAM
+      uses: ./
+      with:
+        openfoam-version: ${{ matrix.openfoam-version }}
+    - name: Run icoFoam -help
+      run: icoFoam -help
+    - name: Test shell session
+      if: matrix.openfoam-version >= 1000
+      run: |
+        openfoam -help
+        openfoam${{ matrix.openfoam-version }} -help
+    - name: Regression test
+      run: . $WM_DIR/scripts/AllwmakeParseArguments
