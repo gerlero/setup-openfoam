@@ -15,33 +15,29 @@ runs:
     - name: Prepare for install
       id: prep
       run: |
+        sudo() {
+          if [ $(id -u) -eq 0 ]; then
+            "$@"
+          else
+            command sudo "$@"
+          fi
+        }
+
         if [ $(uname) == "Darwin" ]; then
           echo "openfoam-bashrc=/Applications/OpenFOAM-v${{ inputs.openfoam-version }}.app/Contents/Resources/etc/bashrc" >> "$GITHUB_OUTPUT"
           echo "openfoam-shell=/Applications/OpenFOAM-v${{ inputs.openfoam-version }}.app/Contents/Resources/etc/openfoam" >> "$GITHUB_OUTPUT"
         elif [ ${{ inputs.openfoam-version }} -lt 1000 ]; then
           export DEBIAN_FRONTEND=noninteractive
-          if [ $(id -u) -eq 0 ]; then
-            apt-get install -y wget software-properties-common || apt update && apt-get install -y wget software-properties-common
-            sh -c "wget -O - https://dl.openfoam.org/gpg.key > /etc/apt/trusted.gpg.d/openfoam.asc"
-            add-apt-repository http://dl.openfoam.org/ubuntu
-            apt update
-          else
-            sudo apt-get install -y wget software-properties-common || sudo apt update && sudo apt-get install -y wget software-properties-common
-            sudo sh -c "wget -O - https://dl.openfoam.org/gpg.key > /etc/apt/trusted.gpg.d/openfoam.asc"
-            sudo add-apt-repository http://dl.openfoam.org/ubuntu
-            sudo apt update
-          fi
+          sudo apt-get install -y wget software-properties-common || sudo apt update && sudo apt-get install -y wget software-properties-common
+          sudo sh -c "wget -O - https://dl.openfoam.org/gpg.key > /etc/apt/trusted.gpg.d/openfoam.asc"
+          sudo add-apt-repository http://dl.openfoam.org/ubuntu
+          sudo apt update
           echo "apt-package=openfoam${{ inputs.openfoam-version }}" >> $GITHUB_OUTPUT
           echo "openfoam-bashrc=/opt/openfoam${{ inputs.openfoam-version }}/etc/bashrc" >> "$GITHUB_OUTPUT"
         else
           export DEBIAN_FRONTEND=noninteractive
-          if [ $(id -u) -eq 0 ]; then
-            sudo apt-get install -y curl || apt update && apt-get install -y curl
-            curl -s https://dl.openfoam.com/add-debian-repo.sh | bash
-          else
-            sudo apt-get install -y curl || sudo apt update && sudo apt-get install -y curl
-            curl -s https://dl.openfoam.com/add-debian-repo.sh | sudo bash
-          fi
+          sudo apt-get install -y curl || sudo apt update && sudo apt-get install -y curl
+          curl -s https://dl.openfoam.com/add-debian-repo.sh | sudo bash
           echo "apt-package=openfoam${{ inputs.openfoam-version }}-default" >> "$GITHUB_OUTPUT"
           echo "openfoam-bashrc=/usr/lib/openfoam/openfoam${{ inputs.openfoam-version }}/etc/bashrc" >> "$GITHUB_OUTPUT"
           echo "openfoam-shell=/usr/lib/openfoam/openfoam${{ inputs.openfoam-version }}/etc/openfoam" >> "$GITHUB_OUTPUT"
@@ -55,12 +51,15 @@ runs:
     - name: Install OpenFOAM on Linux (without caching)
       if: steps.prep.outputs.apt-package && (!inputs.cache || job.container)
       run: |
-        export DEBIAN_FRONTEND=noninteractive
-        if [ $(id -u) -eq 0 ]; then
-          apt-get install -y ${{ steps.prep.outputs.apt-package }}
-        else
-          sudo apt-get install -y ${{ steps.prep.outputs.apt-package }}
-        fi
+        sudo() {
+          if [ $(id -u) -eq 0 ]; then
+            "$@"
+          else
+            command sudo "$@"
+          fi
+        }
+
+        DEBIAN_FRONTEND=noninteractive sudo apt-get install -y ${{ steps.prep.outputs.apt-package }}
       shell: bash
     - name: Get OS version
       if: runner.os == 'macOS' && inputs.cache
