@@ -152,16 +152,20 @@ jobs:
           - 2106
           - 2012
           - 2006
+          - 1912
           - 12
           - 11
           - 10
           - 9
           - 8
           - 7
+          - 6
+          - 5
         container:
           - ubuntu:24.04
           - ubuntu:22.04
           - ubuntu:20.04
+          - ubuntu:18.04
           - debian:bookworm
           - debian:bullseye
         exclude:
@@ -180,6 +184,8 @@ jobs:
           - container: ubuntu:24.04
             openfoam-version: 2006
           - container: ubuntu:24.04
+            openfoam-version: 1912
+          - container: ubuntu:24.04
             openfoam-version: 10
           - container: ubuntu:24.04
             openfoam-version: 9
@@ -205,6 +211,10 @@ jobs:
             openfoam-version: 8
           - container: debian:bookworm
             openfoam-version: 7
+          - container: debian:bookworm
+            openfoam-version: 6
+          - container: debian:bookworm
+            openfoam-version: 5
           - container: debian:bullseye
             openfoam-version: 12
           - container: debian:bullseye
@@ -217,6 +227,10 @@ jobs:
             openfoam-version: 8
           - container: debian:bullseye
             openfoam-version: 7
+          - container: debian:bullseye
+            openfoam-version: 6
+          - container: debian:bullseye
+            openfoam-version: 5
     steps:
     - name: Checkout
       uses: actions/checkout@v4
