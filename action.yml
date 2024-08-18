@@ -45,7 +45,7 @@ runs:
       shell: bash
     - name: Install OpenFOAM on Linux (with caching)
       if: steps.prep.outputs.apt-package && inputs.cache && !job.container
-      uses: eth-pkg/apt-deb-cache@v0.2.6
+      uses: awalsh128/cache-apt-pkgs-action@v1
       with:
         packages: ${{ steps.prep.outputs.apt-package }}
     - name: Install OpenFOAM on Linux (without caching)
