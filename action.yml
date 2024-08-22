@@ -28,15 +28,15 @@ runs:
           echo "openfoam-shell=/Applications/OpenFOAM-v${{ inputs.openfoam-version }}.app/Contents/Resources/etc/openfoam" >> "$GITHUB_OUTPUT"
         elif [ ${{ inputs.openfoam-version }} -lt 1000 ]; then
           export DEBIAN_FRONTEND=noninteractive
-          sudo apt-get install -y wget software-properties-common || sudo apt update && sudo apt-get install -y wget software-properties-common
+          sudo apt-get install -y wget software-properties-common || sudo apt-get update && sudo apt-get install -y wget software-properties-common
           sudo sh -c "wget -O - https://dl.openfoam.org/gpg.key > /etc/apt/trusted.gpg.d/openfoam.asc"
           sudo add-apt-repository http://dl.openfoam.org/ubuntu
-          sudo apt update
+          sudo apt-get update
           echo "apt-packages=openfoam${{ inputs.openfoam-version }}" >> $GITHUB_OUTPUT
           echo "openfoam-bashrc=/opt/openfoam${{ inputs.openfoam-version }}/etc/bashrc" >> "$GITHUB_OUTPUT"
         else
           export DEBIAN_FRONTEND=noninteractive
-          sudo apt-get install -y curl || sudo apt update && sudo apt-get install -y curl
+          sudo apt-get install -y curl || sudo apt-get update && sudo apt-get install -y curl
           curl -s https://dl.openfoam.com/add-debian-repo.sh | sudo bash
           echo "apt-packages=openfoam${{ inputs.openfoam-version }}-default openfoam-selector openfoam${{ inputs.openfoam-version }} openfoam${{ inputs.openfoam-version }}-common openfoam${{ inputs.openfoam-version }}-dev openfoam${{ inputs.openfoam-version }}-source openfoam${{ inputs.openfoam-version }}-tools openfoam${{ inputs.openfoam-version }}-dev openfoam${{ inputs.openfoam-version }}-source openfoam${{ inputs.openfoam-version }}-tutorials" >> $GITHUB_OUTPUT
           echo "openfoam-bashrc=/usr/lib/openfoam/openfoam${{ inputs.openfoam-version }}/etc/bashrc" >> "$GITHUB_OUTPUT"
