@@ -35,7 +35,7 @@ runs:
       uses: gerlero/apt-install@v1
       with:
         packages: ${{ steps.prep.outputs.apt-packages-pre }}
-        cache: ${{ inputs.cache }}
+        cache: ${{ inputs.cache && inputs.cache != 'false' }}
     - name: Add OpenFOAM APT repository (openfoam.org)
       if: steps.prep.outputs.apt-packages && inputs.openfoam-version < 1000
       run: |
@@ -71,11 +71,11 @@ runs:
         update: ${{ inputs.openfoam-version < 1000 }}
         cache: ${{ inputs.cache }}
     - name: Get OS version
-      if: runner.os == 'macOS' && inputs.cache
+      if: runner.os == 'macOS' && inputs.cache && inputs.cache != 'false'
       id: os-version
       uses: sersoft-gmbh/os-version-action@v3
     - name: Cache OpenFOAM on macOS
-      if: runner.os == 'macOS' && inputs.cache
+      if: runner.os == 'macOS' && inputs.cache && inputs.cache != 'false'
       id: cache-macos
       uses: actions/cache@v4
       with:
