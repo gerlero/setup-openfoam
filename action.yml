@@ -12,44 +12,32 @@ branding:
 runs:
   using: "composite"
   steps:
-    - name: Prepare for install
+    - name: Prepare
       id: prep
       run: |
-        sudo() {
-          if [ $(id -u) -eq 0 ]; then
-            "$@"
-          else
-            command sudo "$@"
-          fi
-        }
-
         if [ $(uname) == "Darwin" ]; then
           echo "openfoam-bashrc=/Applications/OpenFOAM-v${{ inputs.openfoam-version }}.app/Contents/Resources/etc/bashrc" >> "$GITHUB_OUTPUT"
           echo "openfoam-shell=/Applications/OpenFOAM-v${{ inputs.openfoam-version }}.app/Contents/Resources/etc/openfoam" >> "$GITHUB_OUTPUT"
         elif [ ${{ inputs.openfoam-version }} -lt 1000 ]; then
-          export DEBIAN_FRONTEND=noninteractive
-          sudo apt-get install -y wget software-properties-common || sudo apt-get update && sudo apt-get install -y wget software-properties-common
-          sudo sh -c "wget -O - https://dl.openfoam.org/gpg.key > /etc/apt/trusted.gpg.d/openfoam.asc"
-          sudo add-apt-repository http://dl.openfoam.org/ubuntu
-          sudo apt-get update
+          which wget && which add-apt-repository || echo "apt-packages-pre=wget software-properties-common" >> $GITHUB_OUTPUT
           echo "apt-packages=openfoam${{ inputs.openfoam-version }}" >> $GITHUB_OUTPUT
           echo "openfoam-bashrc=/opt/openfoam${{ inputs.openfoam-version }}/etc/bashrc" >> "$GITHUB_OUTPUT"
         else
           export DEBIAN_FRONTEND=noninteractive
-          sudo apt-get install -y curl || sudo apt-get update && sudo apt-get install -y curl
-          curl -s https://dl.openfoam.com/add-debian-repo.sh | sudo bash
-          echo "apt-packages=openfoam${{ inputs.openfoam-version }}-default openfoam-selector openfoam${{ inputs.openfoam-version }} openfoam${{ inputs.openfoam-version }}-common openfoam${{ inputs.openfoam-version }}-dev openfoam${{ inputs.openfoam-version }}-source openfoam${{ inputs.openfoam-version }}-tools openfoam${{ inputs.openfoam-version }}-dev openfoam${{ inputs.openfoam-version }}-source openfoam${{ inputs.openfoam-version }}-tutorials" >> $GITHUB_OUTPUT
+          which curl || echo "apt-packages-pre=curl ca-certificates" >> $GITHUB_OUTPUT
+          echo "apt-packages=openfoam${{ inputs.openfoam-version }}-default" >> $GITHUB_OUTPUT
           echo "openfoam-bashrc=/usr/lib/openfoam/openfoam${{ inputs.openfoam-version }}/etc/bashrc" >> "$GITHUB_OUTPUT"
           echo "openfoam-shell=/usr/lib/openfoam/openfoam${{ inputs.openfoam-version }}/etc/openfoam" >> "$GITHUB_OUTPUT"
         fi
       shell: bash
-    - name: Install OpenFOAM on Linux (with caching)
-      if: steps.prep.outputs.apt-packages && inputs.cache && !job.container
-      uses: eth-pkg/apt-deb-cache@v0.2.6
+    - name: Install prerequisites
+      if: steps.prep.outputs.apt-packages-pre
+      uses: gerlero/apt-install@v1
       with:
-        packages: ${{ steps.prep.outputs.apt-packages }}
-    - name: Install OpenFOAM on Linux (without caching)
-      if: steps.prep.outputs.apt-packages && (!inputs.cache || job.container)
+        packages: ${{ steps.prep.outputs.apt-packages-pre }}
+        cache: ${{ inputs.cache }}
+    - name: Add OpenFOAM APT repository (openfoam.org)
+      if: steps.prep.outputs.apt-packages && inputs.openfoam-version < 1000
       run: |
         sudo() {
           if [ $(id -u) -eq 0 ]; then
@@ -59,8 +47,29 @@ runs:
           fi
         }
 
-        DEBIAN_FRONTEND=noninteractive sudo apt-get install -y ${{ steps.prep.outputs.apt-packages }}
+        sudo sh -c "wget -O - https://dl.openfoam.org/gpg.key > /etc/apt/trusted.gpg.d/openfoam.asc"
+        sudo add-apt-repository http://dl.openfoam.org/ubuntu
       shell: bash
+    - name: Add OpenFOAM APT repository (openfoam.com)
+      if: steps.prep.outputs.apt-packages && inputs.openfoam-version >= 1000
+      run: |
+        sudo() {
+          if [ $(id -u) -eq 0 ]; then
+            "$@"
+          else
+            command sudo "$@"
+          fi
+        }
+
+        curl -s https://dl.openfoam.com/add-debian-repo.sh | sudo bash
+      shell: bash
+    - name: Install OpenFOAM on Linux
+      if: steps.prep.outputs.apt-packages
+      uses: gerlero/apt-install@v1
+      with:
+        packages: ${{ steps.prep.outputs.apt-packages }}
+        update: ${{ inputs.openfoam-version < 1000 }}
+        cache: ${{ inputs.cache }}
     - name: Get OS version
       if: runner.os == 'macOS' && inputs.cache
       id: os-version
