@@ -69,7 +69,7 @@ runs:
       with:
         packages: ${{ steps.prep.outputs.apt-packages }}
         update: ${{ inputs.openfoam-version < 1000 }}
-        cache: ${{ inputs.cache }}
+        cache: ${{ inputs.cache && inputs.cache != 'false' }}
     - name: Get OS version
       if: runner.os == 'macOS' && inputs.cache && inputs.cache != 'false'
       id: os-version
