@@ -35,6 +35,7 @@ runs:
       uses: gerlero/apt-install@v1
       with:
         packages: ${{ steps.prep.outputs.apt-packages-pre }}
+        install-recommends: false
         cache: ${{ inputs.cache && inputs.cache != 'false' }}
     - name: Add OpenFOAM APT repository (openfoam.org)
       if: steps.prep.outputs.apt-packages && inputs.openfoam-version < 1000
@@ -68,6 +69,7 @@ runs:
       uses: gerlero/apt-install@v1
       with:
         packages: ${{ steps.prep.outputs.apt-packages }}
+        install-recommends: false
         update: ${{ inputs.openfoam-version < 1000 }}
         cache: ${{ inputs.cache && inputs.cache != 'false' }}
     - name: Get OS version
