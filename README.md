@@ -17,6 +17,16 @@ steps:
 - run: icoFoam
 ```
 
+## Inputs
+
+### `openfoam-version`
+
+**Required**. OpenFOAM version number (read below for the available versions).
+
+### `cache`
+
+Whether to cache the OpenFOAM installation between runs. Default: `true`.
+
 ## Available OpenFOAM versions by runner OS
 
 - **`ubuntu-24.04`**: 2406, 2312 (openfoam.com), 12, 11 (openfoam.org)
