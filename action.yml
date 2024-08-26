@@ -16,18 +16,15 @@ runs:
       id: prep
       run: |
         if [ $(uname) == "Darwin" ]; then
-          echo "openfoam-bashrc=/Applications/OpenFOAM-v${{ inputs.openfoam-version }}.app/Contents/Resources/etc/bashrc" >> "$GITHUB_OUTPUT"
-          echo "openfoam-shell=/Applications/OpenFOAM-v${{ inputs.openfoam-version }}.app/Contents/Resources/etc/openfoam" >> "$GITHUB_OUTPUT"
+          echo "openfoam-etc=/Applications/OpenFOAM-v${{ inputs.openfoam-version }}.app/Contents/Resources/etc" >> "$GITHUB_OUTPUT"
         elif [ ${{ inputs.openfoam-version }} -lt 1000 ]; then
           which wget && which add-apt-repository || echo "apt-packages-pre=wget software-properties-common" >> $GITHUB_OUTPUT
           echo "apt-packages=openfoam${{ inputs.openfoam-version }}" >> $GITHUB_OUTPUT
-          echo "openfoam-bashrc=/opt/openfoam${{ inputs.openfoam-version }}/etc/bashrc" >> "$GITHUB_OUTPUT"
+          echo "openfoam-etc=/opt/openfoam${{ inputs.openfoam-version }}/etc" >> "$GITHUB_OUTPUT"
         else
-          export DEBIAN_FRONTEND=noninteractive
           which curl || echo "apt-packages-pre=curl ca-certificates" >> $GITHUB_OUTPUT
           echo "apt-packages=openfoam${{ inputs.openfoam-version }}-default" >> $GITHUB_OUTPUT
-          echo "openfoam-bashrc=/usr/lib/openfoam/openfoam${{ inputs.openfoam-version }}/etc/bashrc" >> "$GITHUB_OUTPUT"
-          echo "openfoam-shell=/usr/lib/openfoam/openfoam${{ inputs.openfoam-version }}/etc/openfoam" >> "$GITHUB_OUTPUT"
+          echo "openfoam-etc=/usr/lib/openfoam/openfoam${{ inputs.openfoam-version }}/etc" >> "$GITHUB_OUTPUT"
         fi
       shell: bash
     - name: Install prerequisites
@@ -91,7 +88,7 @@ runs:
     - name: Activate OpenFOAM for future steps
       run: |
         OLD_PATH="$PATH"
-        source "${{ steps.prep.outputs.openfoam-bashrc }}" || true
+        source "${{ steps.prep.outputs.openfoam-etc }}/bashrc" || true
 
         for var in "${!WM_@}"; do
           echo "$var=${!var}" >> "$GITHUB_ENV"
@@ -105,11 +102,11 @@ runs:
 
         echo "${PATH/%:$OLD_PATH}" >> "$GITHUB_PATH"
       shell: bash
-    - name: Add shell session commands to PATH
-      if: steps.prep.outputs.openfoam-shell
+    - name: Add openfoam command to PATH
+      if: inputs.openfoam-version >= 1000
       run: |
         mkdir -p ~/.setup-openfoam/bin
-        ln -s "${{ steps.prep.outputs.openfoam-shell }}" ~/.setup-openfoam/bin/openfoam${{ inputs.openfoam-version }}
-        ln -s "${{ steps.prep.outputs.openfoam-shell }}" ~/.setup-openfoam/bin/openfoam
+        ln -s "${{ steps.prep.outputs.openfoam-etc }}/openfoam" ~/.setup-openfoam/bin/openfoam${{ inputs.openfoam-version }}
+        ln -s "${{ steps.prep.outputs.openfoam-etc }}/openfoam" ~/.setup-openfoam/bin/openfoam
         echo ~/.setup-openfoam/bin >> "$GITHUB_PATH"
       shell: bash
