@@ -16,6 +16,8 @@ runs:
       id: prep
       run: |
         if [ $(uname) == "Darwin" ]; then
+          brew tap gerlero/openfoam
+          echo "openfoam-app-version=$(brew info gerlero/openfoam/openfoam | head -n 1 | awk '{print $3}')" >> "$GITHUB_OUTPUT"
           echo "openfoam-etc=/Applications/OpenFOAM-v${{ inputs.openfoam-version }}.app/Contents/Resources/etc" >> "$GITHUB_OUTPUT"
         elif [ ${{ inputs.openfoam-version }} -lt 1000 ]; then
           which wget && which add-apt-repository || echo "apt-packages-pre=wget software-properties-common" >> $GITHUB_OUTPUT
@@ -68,22 +70,24 @@ runs:
         install-recommends: false
         update: ${{ inputs.openfoam-version < 1000 }}
         cache: ${{ inputs.cache && inputs.cache != 'false' }}
-    - name: Get OS version
-      if: runner.os == 'macOS' && inputs.cache && inputs.cache != 'false'
-      id: os-version
-      uses: sersoft-gmbh/os-version-action@v3
-    - name: Cache OpenFOAM on macOS
+    - name: Restore OpenFOAM on macOS from cache
       if: runner.os == 'macOS' && inputs.cache && inputs.cache != 'false'
       id: cache-macos
-      uses: actions/cache@v4
+      uses: actions/cache/restore@v4
       with:
-        key: setup-openfoam-${{ inputs.openfoam-version }}-${{ runner.os }}-${{ steps.os-version.outputs.version }}-${{ runner.arch }}
         path: /Applications/OpenFOAM-v${{ inputs.openfoam-version }}.app
+        key: setup-openfoam-${{ runner.os }}-${{ runner.arch }}-${{ inputs.openfoam-version }}-${{ steps.prep.outputs.openfoam-app-version }}
     - name: Install OpenFOAM on macOS
       if: runner.os == 'macOS' && steps.cache-macos.outputs.cache-hit != 'true'
       run: |
         brew install --no-quarantine gerlero/openfoam/openfoam@${{ inputs.openfoam-version }}
       shell: bash
+    - name: Save OpenFOAM on macOS to cache
+      if: runner.os == 'macOS' && inputs.cache && inputs.cache != 'false' && steps.cache-macos.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        path: /Applications/OpenFOAM-v${{ inputs.openfoam-version }}.app
+        key: ${{ steps.cache-macos.outputs.cache-primary-key }}
     - name: Activate OpenFOAM for future steps
       run: |
         OLD_PATH="$PATH"
