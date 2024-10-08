@@ -90,7 +90,7 @@ runs:
         key: ${{ steps.cache-macos.outputs.cache-primary-key }}
     - name: Activate OpenFOAM for future steps
       run: |
-        OLD_PATH="$PATH"
+        old_path="$PATH"
         source "${{ steps.prep.outputs.openfoam-etc }}/bashrc" || true
 
         for var in "${!WM_@}"; do
@@ -103,7 +103,7 @@ runs:
 
         echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH" >> "$GITHUB_ENV"
 
-        echo "${PATH/%:$OLD_PATH}" >> "$GITHUB_PATH"
+        echo "${PATH/%:$old_path}" >> "$GITHUB_PATH"
       shell: bash
     - name: Add openfoam command to PATH
       if: inputs.openfoam-version >= 1000
