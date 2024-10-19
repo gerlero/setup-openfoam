@@ -93,7 +93,14 @@ runs:
       if: inputs.openfoam-version >= 1000
       run: |
         mkdir -p ~/.setup-openfoam/bin
-        ln -s "${{ steps.prep.outputs.openfoam-etc }}/openfoam" ~/.setup-openfoam/bin/openfoam${{ inputs.openfoam-version }}
-        ln -s "${{ steps.prep.outputs.openfoam-etc }}/openfoam" ~/.setup-openfoam/bin/openfoam
+
+        cat << 'EOF' > ~/.setup-openfoam/bin/openfoam${{ inputs.openfoam-version }}
+        #!/bin/bash
+        exec "${{ steps.prep.outputs.openfoam-etc }}/openfoam" "$@"
+        EOF
+        chmod +x ~/.setup-openfoam/bin/openfoam${{ inputs.openfoam-version }}
+
+        ln -sf ~/.setup-openfoam/bin/openfoam${{ inputs.openfoam-version }} ~/.setup-openfoam/bin/openfoam
+
         echo ~/.setup-openfoam/bin >> "$GITHUB_PATH"
       shell: bash
