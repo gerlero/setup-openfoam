@@ -141,17 +141,17 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
-    - name: Set up OpenFOAM
+    - name: Set up OpenFOAM ${{ matrix.openfoam-version }}
       uses: ./
       with:
         openfoam-version: ${{ matrix.openfoam-version }}
-    - name: Run icoFoam -help
-      run: icoFoam -help
+    - name: Test icoFoam -help
+      run: icoFoam -help | grep ${{ matrix.openfoam-version }}
     - name: Test shell session
       if: matrix.openfoam-version >= 1000
       run: |
-        openfoam -help
-        openfoam${{ matrix.openfoam-version }} -help
+        openfoam icoFoam -help | grep ${{ matrix.openfoam-version }}
+        openfoam${{ matrix.openfoam-version }} icoFoam -help | grep ${{ matrix.openfoam-version }}
     - name: Regression test
       run: source $WM_DIR/scripts/AllwmakeParseArguments
 
@@ -239,16 +239,36 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
-    - name: Set up OpenFOAM
+    - name: Set up OpenFOAM ${{ matrix.openfoam-version }}
       uses: ./
       with:
         openfoam-version: ${{ matrix.openfoam-version }}
-    - name: Run icoFoam -help
-      run: icoFoam -help
+    - name: Test icoFoam -help
+      run: icoFoam -help | grep ${{ matrix.openfoam-version }}
     - name: Test shell session
       if: matrix.openfoam-version >= 1000
       run: |
-        openfoam -help
-        openfoam${{ matrix.openfoam-version }} -help
+        openfoam icoFoam -help | grep ${{ matrix.openfoam-version }}
+        openfoam${{ matrix.openfoam-version }} icoFoam -help | grep ${{ matrix.openfoam-version }}
     - name: Regression test
       run: . $WM_DIR/scripts/AllwmakeParseArguments
+
+  multiple-installs:
+    runs-on: ubuntu-24.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Set up OpenFOAM 2406
+      uses: ./
+      with:
+        openfoam-version: 2406
+    - name: Set up OpenFOAM 2312
+      uses: ./
+      with:
+        openfoam-version: 2312
+    - name: Test OpenFOAM 2312
+      run: |
+        icoFoam -help | grep 2312
+        openfoam icoFoam -help | grep 2312
+    - name: Test OpenFOAM v2406
+      run: openfoam2406 icoFoam -help | grep 2406
