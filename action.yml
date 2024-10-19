@@ -17,6 +17,7 @@ runs:
       uses: gerlero/apt-install@v1
       with:
         packages: ca-certificates
+        upgrade: false
         install-recommends: false
         cache: ${{ inputs.cache && inputs.cache != 'false' }}
     - name: Prepare
