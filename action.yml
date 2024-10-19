@@ -12,6 +12,13 @@ branding:
 runs:
   using: "composite"
   steps:
+    - name: Install Linux prerequisites
+      if: runner.os != 'macOS'
+      uses: gerlero/apt-install@v1
+      with:
+        packages: ca-certificates
+        install-recommends: false
+        cache: ${{ inputs.cache && inputs.cache != 'false' }}
     - name: Prepare
       id: prep
       run: |
@@ -28,14 +35,12 @@ runs:
           echo "openfoam-app-version=$(brew info gerlero/openfoam/openfoam | head -n 1 | awk '{print $3}')" >> "$GITHUB_OUTPUT"
           echo "openfoam-etc=/Applications/OpenFOAM-v${{ inputs.openfoam-version }}.app/Contents/Resources/etc" >> "$GITHUB_OUTPUT"
         elif [ ${{ inputs.openfoam-version }} -lt 1000 ]; then
-          sudo apt-get update && sudo apt-get install --no-install-recommends -y gnupg ca-certificates
-          sudo apt-key add $GITHUB_ACTION_PATH/gpg.key
+          sudo cp $GITHUB_ACTION_PATH/gpg.key /etc/apt/trusted.gpg.d/openfoam.asc
           sudo bash -c "echo \"deb [arch=$(dpkg --print-architecture)] http://dl.openfoam.org/ubuntu $(sed -ne 's/^VERSION_CODENAME=//p' /etc/os-release) main\" > /etc/apt/sources.list.d/openfoam.list"
           echo "apt-packages=openfoam${{ inputs.openfoam-version }}" >> $GITHUB_OUTPUT
           echo "openfoam-etc=/opt/openfoam${{ inputs.openfoam-version }}/etc" >> "$GITHUB_OUTPUT"
         else
-          sudo apt-get update && sudo apt-get install --no-install-recommends -y gnupg ca-certificates
-          sudo apt-key add $GITHUB_ACTION_PATH/pubkey.gpg
+          sudo cp $GITHUB_ACTION_PATH/pubkey.gpg /etc/apt/trusted.gpg.d/openfoam.asc
           sudo bash -c "echo \"deb [arch=$(dpkg --print-architecture)] https://dl.openfoam.com/repos/deb $(sed -ne 's/^VERSION_CODENAME=//p' /etc/os-release) main\" > /etc/apt/sources.list.d/openfoam.list"
           echo "apt-packages=openfoam${{ inputs.openfoam-version }}-default" >> $GITHUB_OUTPUT
           echo "openfoam-etc=/usr/lib/openfoam/openfoam${{ inputs.openfoam-version }}/etc" >> "$GITHUB_OUTPUT"
