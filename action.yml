@@ -38,12 +38,12 @@ runs:
         elif [ ${{ inputs.openfoam-version }} -lt 1000 ]; then
           sudo cp "$GITHUB_ACTION_PATH/gpg.key" /etc/apt/trusted.gpg.d/setup-openfoam-org.asc
           sudo bash -c "echo \"deb [arch=$(dpkg --print-architecture)] http://dl.openfoam.org/ubuntu $(sed -ne 's/^VERSION_CODENAME=//p' /etc/os-release) main\" > /etc/apt/sources.list.d/setup-openfoam-org.list"
-          echo "apt-package=openfoam${{ inputs.openfoam-version }}" >> $GITHUB_OUTPUT
+          echo "apt-package=openfoam${{ inputs.openfoam-version }}" >> "$GITHUB_OUTPUT"
           echo "openfoam-etc=/opt/openfoam${{ inputs.openfoam-version }}/etc" >> "$GITHUB_OUTPUT"
         else
           sudo cp "$GITHUB_ACTION_PATH/pubkey.gpg" /etc/apt/trusted.gpg.d/setup-openfoam-com.asc
           sudo bash -c "echo \"deb [arch=$(dpkg --print-architecture)] https://dl.openfoam.com/repos/deb $(sed -ne 's/^VERSION_CODENAME=//p' /etc/os-release) main\" > /etc/apt/sources.list.d/setup-openfoam-com.list"
-          echo "apt-package=openfoam${{ inputs.openfoam-version }}-default" >> $GITHUB_OUTPUT
+          echo "apt-package=openfoam${{ inputs.openfoam-version }}-default" >> "$GITHUB_OUTPUT"
           echo "openfoam-etc=/usr/lib/openfoam/openfoam${{ inputs.openfoam-version }}/etc" >> "$GITHUB_OUTPUT"
         fi
       shell: bash
