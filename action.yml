@@ -13,7 +13,7 @@ runs:
   using: "composite"
   steps:
     - name: Install Linux prerequisites
-      if: runner.os != 'macOS'
+      if: runner.os != 'macOS' && inputs.openfoam-version >= 1000
       uses: gerlero/apt-install@v1
       with:
         packages: ca-certificates
