@@ -19,7 +19,7 @@ runs:
         packages: ca-certificates
         upgrade: false
         install-recommends: false
-        cache: ${{ inputs.cache && inputs.cache != 'false' }}
+        cache: ${{ inputs.cache == 'true' }}
     - name: Prepare
       id: prep
       run: |
@@ -53,9 +53,9 @@ runs:
       with:
         packages: ${{ steps.prep.outputs.apt-package }}
         install-recommends: false
-        cache: ${{ inputs.cache && inputs.cache != 'false' }}
+        cache: ${{ inputs.cache == 'true' }}
     - name: Restore OpenFOAM on macOS from cache
-      if: runner.os == 'macOS' && inputs.cache && inputs.cache != 'false'
+      if: runner.os == 'macOS' && inputs.cache == 'true'
       id: cache-macos
       uses: actions/cache/restore@v4
       with:
@@ -67,7 +67,7 @@ runs:
         brew install --no-quarantine gerlero/openfoam/openfoam@${{ inputs.openfoam-version }}
       shell: bash
     - name: Save OpenFOAM on macOS to cache
-      if: runner.os == 'macOS' && inputs.cache && inputs.cache != 'false' && steps.cache-macos.outputs.cache-hit != 'true'
+      if: runner.os == 'macOS' && inputs.cache == 'true' && steps.cache-macos.outputs.cache-hit != 'true'
       uses: actions/cache/save@v4
       with:
         path: /Applications/OpenFOAM-v${{ inputs.openfoam-version }}.app
