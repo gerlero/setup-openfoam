@@ -12,14 +12,6 @@ branding:
 runs:
   using: "composite"
   steps:
-    - name: Install Linux prerequisites
-      if: runner.os != 'macOS' && inputs.openfoam-version >= 1000
-      uses: gerlero/apt-install@v1
-      with:
-        packages: ca-certificates
-        upgrade: false
-        install-recommends: false
-        cache: ${{ inputs.cache == 'true' }}
     - name: Prepare
       id: prep
       run: |
