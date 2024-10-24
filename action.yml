@@ -36,25 +36,24 @@ runs:
           echo "openfoam-app-version=$(brew info gerlero/openfoam/openfoam | head -n 1 | awk '{print $3}')" >> "$GITHUB_OUTPUT"
           echo "openfoam-etc=/Applications/OpenFOAM-v${{ inputs.openfoam-version }}.app/Contents/Resources/etc" >> "$GITHUB_OUTPUT"
         elif [ ${{ inputs.openfoam-version }} -lt 1000 ]; then
-          echo ::group::Add openfoam.org APT repository
-          key=/usr/share/keyrings/setup-openfoam-org.asc
-          sudo cp "$GITHUB_ACTION_PATH/gpg.key" "$key"
-          echo "deb [signed-by=$key] http://dl.openfoam.org/ubuntu $(sed -ne 's/^VERSION_CODENAME=//p' /etc/os-release) main" \
-            | sudo tee /etc/apt/sources.list.d/setup-openfoam-org.list
-          echo ::endgroup::
+          echo "apt-repository=http://dl.openfoam.org/ubuntu" >> "$GITHUB_OUTPUT"
+          echo "apt-key=$GITHUB_ACTION_PATH/gpg.key" >> "$GITHUB_OUTPUT"
           echo "apt-package=openfoam${{ inputs.openfoam-version }}" >> "$GITHUB_OUTPUT"
           echo "openfoam-etc=/opt/openfoam${{ inputs.openfoam-version }}/etc" >> "$GITHUB_OUTPUT"
         else
-          echo ::group::Add openfoam.com APT repository
-          key=/usr/share/keyrings/setup-openfoam-com.asc
-          sudo cp "$GITHUB_ACTION_PATH/pubkey.gpg" "$key"
-          echo "deb [signed-by=$key] https://dl.openfoam.com/repos/deb $(sed -ne 's/^VERSION_CODENAME=//p' /etc/os-release) main" \
-            | sudo tee /etc/apt/sources.list.d/setup-openfoam-com.list
-          echo ::endgroup::
+          echo "apt-repository=https://dl.openfoam.com/repos/deb" >> "$GITHUB_OUTPUT"
+          echo "apt-key=$GITHUB_ACTION_PATH/pubkey.gpg" >> "$GITHUB_OUTPUT"
           echo "apt-package=openfoam${{ inputs.openfoam-version }}-default" >> "$GITHUB_OUTPUT"
           echo "openfoam-etc=/usr/lib/openfoam/openfoam${{ inputs.openfoam-version }}/etc" >> "$GITHUB_OUTPUT"
         fi
       shell: bash
+    - name: Add APT repository
+      if: steps.prep.outputs.apt-repository
+      uses: gerlero/add-apt-repository@v1
+      with:
+        uri: ${{ steps.prep.outputs.apt-repository }}
+        key: ${{ steps.prep.outputs.apt-key }}
+        cache: ${{ inputs.cache == 'true' }}
     - name: Install OpenFOAM on Linux
       if: steps.prep.outputs.apt-package
       uses: gerlero/apt-install@v1
