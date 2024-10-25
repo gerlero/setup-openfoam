@@ -51,3 +51,9 @@ Whether to cache the OpenFOAM installation between runs. Default: `true`.
   - `debian:bullseye`: 2406, 2312, 2306, 2212, 2206, 2112, 2106, 2012, 2006 (openfoam.com)
 
 - Windows: not supported
+
+## Related actions
+
+- [`gerlero/apt-install`](github.com/gerlero/apt-install): GitHub Action to install and cache APT packages.
+- [`gerlero/add-apt-repository`](github.com/gerlero/add-apt-repository): GitHub Action to add a new APT repository for installing packages.
+- [`gerlero/brew-install`](github.com/gerlero/brew-install): GitHub Action to install and cache Homebrew packages.
