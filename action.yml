@@ -15,14 +15,6 @@ runs:
     - name: Prepare
       id: prep
       run: |
-        sudo() {
-          if [ $(id -u) -eq 0 ]; then
-            "$@"
-          else
-            command sudo "$@"
-          fi
-        }
-
         if [ $(uname) == "Darwin" ]; then
           brew tap gerlero/openfoam
           echo "openfoam-app-version=$(brew info gerlero/openfoam/openfoam | head -n 1 | awk '{print $3}')" >> "$GITHUB_OUTPUT"
