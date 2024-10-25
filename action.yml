@@ -16,8 +16,7 @@ runs:
       id: prep
       run: |
         if [ $(uname) == "Darwin" ]; then
-          brew tap gerlero/openfoam
-          echo "openfoam-app-version=$(brew info gerlero/openfoam/openfoam | head -n 1 | awk '{print $3}')" >> "$GITHUB_OUTPUT"
+          echo "brew-cask=gerlero/openfoam/openfoam@${{ inputs.openfoam-version }}" >> "$GITHUB_OUTPUT"
           echo "openfoam-etc=/Applications/OpenFOAM-v${{ inputs.openfoam-version }}.app/Contents/Resources/etc" >> "$GITHUB_OUTPUT"
         elif [ ${{ inputs.openfoam-version }} -lt 1000 ]; then
           echo "apt-repository=http://dl.openfoam.org/ubuntu" >> "$GITHUB_OUTPUT"
@@ -45,24 +44,12 @@ runs:
         packages: ${{ steps.prep.outputs.apt-package }}
         install-recommends: false
         cache: ${{ inputs.cache == 'true' }}
-    - name: Restore OpenFOAM on macOS from cache
-      if: runner.os == 'macOS' && inputs.cache == 'true'
-      id: cache-macos
-      uses: actions/cache/restore@v4
-      with:
-        path: /Applications/OpenFOAM-v${{ inputs.openfoam-version }}.app
-        key: setup-openfoam-${{ runner.os }}-${{ runner.arch }}-${{ inputs.openfoam-version }}-${{ steps.prep.outputs.openfoam-app-version }}
     - name: Install OpenFOAM on macOS
-      if: runner.os == 'macOS' && steps.cache-macos.outputs.cache-hit != 'true'
-      run: |
-        brew install --no-quarantine gerlero/openfoam/openfoam@${{ inputs.openfoam-version }}
-      shell: bash
-    - name: Save OpenFOAM on macOS to cache
-      if: runner.os == 'macOS' && inputs.cache == 'true' && steps.cache-macos.outputs.cache-hit != 'true'
-      uses: actions/cache/save@v4
+      if: steps.prep.outputs.brew-cask
+      uses: gerlero/brew-install@v1
       with:
-        path: /Applications/OpenFOAM-v${{ inputs.openfoam-version }}.app
-        key: ${{ steps.cache-macos.outputs.cache-primary-key }}
+        packages: ${{ steps.prep.outputs.brew-cask }}
+        cache: ${{ inputs.cache == 'true' }}
     - name: Activate OpenFOAM for future steps
       run: |
         old_path="$PATH"
@@ -84,14 +71,6 @@ runs:
       if: inputs.openfoam-version >= 1000
       run: |
         mkdir -p ~/.setup-openfoam/bin
-
-        cat << 'EOF' > ~/.setup-openfoam/bin/openfoam${{ inputs.openfoam-version }}
-        #!/bin/bash
-        exec "${{ steps.prep.outputs.openfoam-etc }}/openfoam" "$@"
-        EOF
-        chmod +x ~/.setup-openfoam/bin/openfoam${{ inputs.openfoam-version }}
-
-        ln -sf ~/.setup-openfoam/bin/openfoam${{ inputs.openfoam-version }} ~/.setup-openfoam/bin/openfoam
-
+        ln -sf $(which openfoam${{ inputs.openfoam-version }}) ~/.setup-openfoam/bin/openfoam
         echo ~/.setup-openfoam/bin >> "$GITHUB_PATH"
       shell: bash
