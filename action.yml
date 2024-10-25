@@ -49,6 +49,7 @@ runs:
       uses: gerlero/brew-install@v1
       with:
         packages: ${{ steps.prep.outputs.brew-cask }}
+        type: cask
         cache: ${{ inputs.cache == 'true' }}
     - name: Activate OpenFOAM for future steps
       run: |
