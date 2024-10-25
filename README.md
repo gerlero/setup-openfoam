@@ -54,6 +54,6 @@ Whether to cache the OpenFOAM installation between runs. Default: `true`.
 
 ## Related actions
 
-- [`gerlero/apt-install`](github.com/gerlero/apt-install): GitHub Action to install and cache APT packages.
-- [`gerlero/add-apt-repository`](github.com/gerlero/add-apt-repository): GitHub Action to add a new APT repository for installing packages.
-- [`gerlero/brew-install`](github.com/gerlero/brew-install): GitHub Action to install and cache Homebrew packages.
+- [`gerlero/apt-install`](https://github.com/gerlero/apt-install): GitHub Action to install and cache APT packages.
+- [`gerlero/add-apt-repository`](https://github.com/gerlero/add-apt-repository): GitHub Action to add a new APT repository for installing packages.
+- [`gerlero/brew-install`](https://github.com/gerlero/brew-install): GitHub Action to install and cache Homebrew packages.
