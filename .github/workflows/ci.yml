@@ -38,7 +38,6 @@ jobs:
           - macos-15
           - macos-14
           - macos-13
-          - macos-12
         exclude:
           - os: ubuntu-24.04
             openfoam-version: 2306
@@ -119,24 +118,6 @@ jobs:
           - os: macos-13
             openfoam-version: 8
           - os: macos-13
-            openfoam-version: 7
-          - os: macos-12
-            openfoam-version: 2106
-          - os: macos-12
-            openfoam-version: 2012
-          - os: macos-12
-            openfoam-version: 2006
-          - os: macos-12
-            openfoam-version: 12
-          - os: macos-12
-            openfoam-version: 11
-          - os: macos-12
-            openfoam-version: 10
-          - os: macos-12
-            openfoam-version: 9
-          - os: macos-12
-            openfoam-version: 8
-          - os: macos-12
             openfoam-version: 7
     steps:
     - name: Checkout
