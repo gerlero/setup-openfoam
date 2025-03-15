@@ -18,6 +18,23 @@ steps:
 - run: icoFoam
 ```
 
+### testing mulitple OpenFOAM versions
+
+```yaml
+strategy:
+  matrix:
+    openfoam-version: [2312, 2406, 2412]  # Add other versions here if needed
+
+steps:
+- uses: actions/checkout@v4
+- name: Set up OpenFOAM
+  uses: gerlero/setup-openfoam@v1
+  with:
+    openfoam-version: ${{ matrix.openfoam-version }}
+- run: blockMesh
+- run: icoFoam
+```
+
 ## Inputs
 
 ### `openfoam-version`
