@@ -18,7 +18,7 @@ steps:
 - run: icoFoam
 ```
 
-### Testing mulitple OpenFOAM versions
+### Testing multiple OpenFOAM versions
 
 ```yaml
 strategy:
