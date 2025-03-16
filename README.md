@@ -18,13 +18,13 @@ steps:
 - run: icoFoam
 ```
 
-### testing mulitple OpenFOAM versions
+### Testing mulitple OpenFOAM versions
 
 ```yaml
 strategy:
   matrix:
-    openfoam-version: [2312, 2406, 2412]  # Add other versions here if needed
-
+    openfoam-version: [11, 12, 2406, 2412]  # Add other versions here if needed
+  fail-fast: true
 steps:
 - uses: actions/checkout@v4
 - name: Set up OpenFOAM
