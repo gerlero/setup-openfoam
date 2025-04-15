@@ -30,12 +30,9 @@ jobs:
           - 11
           - 10
           - 9
-          - 8
-          - 7
         os:
           - ubuntu-24.04
           - ubuntu-22.04
-          - ubuntu-20.04
           - macos-15
           - macos-14
           - macos-13
@@ -58,14 +55,6 @@ jobs:
             openfoam-version: 10
           - os: ubuntu-24.04
             openfoam-version: 9
-          - os: ubuntu-24.04
-            openfoam-version: 8
-          - os: ubuntu-24.04
-            openfoam-version: 7
-          - os: ubuntu-22.04
-            openfoam-version: 8
-          - os: ubuntu-22.04
-            openfoam-version: 7
           - os: macos-15
             openfoam-version: 2106
           - os: macos-15
@@ -80,10 +69,6 @@ jobs:
             openfoam-version: 10
           - os: macos-15
             openfoam-version: 9
-          - os: macos-15
-            openfoam-version: 8
-          - os: macos-15
-            openfoam-version: 7
           - os: macos-14
             openfoam-version: 2106
           - os: macos-14
@@ -98,10 +83,6 @@ jobs:
             openfoam-version: 10
           - os: macos-14
             openfoam-version: 9
-          - os: macos-14
-            openfoam-version: 8
-          - os: macos-14
-            openfoam-version: 7
           - os: macos-13
             openfoam-version: 2106
           - os: macos-13
@@ -116,10 +97,6 @@ jobs:
             openfoam-version: 10
           - os: macos-13
             openfoam-version: 9
-          - os: macos-13
-            openfoam-version: 8
-          - os: macos-13
-            openfoam-version: 7
     steps:
     - name: Checkout
       uses: actions/checkout@v4

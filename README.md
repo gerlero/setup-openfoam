@@ -51,8 +51,6 @@ Whether to cache the OpenFOAM installation between runs. Default: `true`.
 
 - **`ubuntu-22.04`**: 2412, 2406, 2312, 2306, 2212, 2206, 2112, 2106, 2012, 2006 (openfoam.com), 12, 11, 10, 9 (openfoam.org)
 
-- **`ubuntu-20.04`**: 2412, 2406, 2312, 2306, 2212, 2206, 2112, 2106, 2012, 2006 (openfoam.com), 12, 11, 10, 9, 8, 7 (openfoam.org)
-
 - **`macos-15`**, **`macos-14`**, **`macos-13`**: 2412, 2406, 2312, 2306, 2212, 2206, 2112 (via [OpenFOAM.app](https://github.com/gerlero/openfoam-app))
 
 - [Docker `container`](https://docs.github.com/en/actions/writing-workflows/choosing-where-your-workflow-runs/running-jobs-in-a-container) based on:
