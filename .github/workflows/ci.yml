@@ -33,6 +33,8 @@ jobs:
         os:
           - ubuntu-24.04
           - ubuntu-22.04
+          - ubuntu-24.04-arm
+          - ubuntu-22.04-arm
           - macos-15
           - macos-14
           - macos-13
@@ -54,6 +56,26 @@ jobs:
           - os: ubuntu-24.04
             openfoam-version: 10
           - os: ubuntu-24.04
+            openfoam-version: 9
+          - os: ubuntu-24.04-arm
+            openfoam-version: 2206
+          - os: ubuntu-24.04-arm
+            openfoam-version: 2112
+          - os: ubuntu-24.04-arm
+            openfoam-version: 2106
+          - os: ubuntu-24.04-arm
+            openfoam-version: 2012
+          - os: ubuntu-24.04-arm
+            openfoam-version: 2006
+          - os: ubuntu-24.04-arm
+            openfoam-version: 10
+          - os: ubuntu-24.04-arm
+            openfoam-version: 9
+          - os: ubuntu-22.04-arm
+            openfoam-version: 2012
+          - os: ubuntu-22.04-arm
+            openfoam-version: 10
+          - os: ubuntu-22.04-arm
             openfoam-version: 9
           - os: macos-15
             openfoam-version: 2106
