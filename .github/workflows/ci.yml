@@ -40,10 +40,6 @@ jobs:
           - macos-13
         exclude:
           - os: ubuntu-24.04
-            openfoam-version: 2306
-          - os: ubuntu-24.04
-            openfoam-version: 2212
-          - os: ubuntu-24.04
             openfoam-version: 2206
           - os: ubuntu-24.04
             openfoam-version: 2112
@@ -166,10 +162,6 @@ jobs:
           - debian:bookworm
           - debian:bullseye
         exclude:
-          - container: ubuntu:24.04
-            openfoam-version: 2306
-          - container: ubuntu:24.04
-            openfoam-version: 2212
           - container: ubuntu:24.04
             openfoam-version: 2206
           - container: ubuntu:24.04
