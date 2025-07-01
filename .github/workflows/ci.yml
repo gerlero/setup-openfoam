@@ -16,6 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         openfoam-version:
+          - 2506
           - 2412
           - 2406
           - 2312
@@ -139,6 +140,7 @@ jobs:
       fail-fast: false
       matrix:
         openfoam-version:
+          - 2506
           - 2412
           - 2406
           - 2312
@@ -185,6 +187,8 @@ jobs:
           - container: ubuntu:22.04
             openfoam-version: 7
           - container: debian:bookworm
+            openfoam-version: 2506
+          - container: debian:bookworm
             openfoam-version: 2412
           - container: debian:bookworm
             openfoam-version: 2406
@@ -204,6 +208,8 @@ jobs:
             openfoam-version: 8
           - container: debian:bookworm
             openfoam-version: 7
+          - container: debian:bullseye
+            openfoam-version: 2506
           - container: debian:bullseye
             openfoam-version: 2412
           - container: debian:bullseye
@@ -244,17 +250,17 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
-    - name: Set up OpenFOAM 2412
+    - name: Set up OpenFOAM 2506
       uses: ./
       with:
-        openfoam-version: 2412
+        openfoam-version: 2506
     - name: Set up OpenFOAM 2406
       uses: ./
       with:
-        openfoam-version: 2406
-    - name: Test OpenFOAM 2406
-      run: |
-        icoFoam -help | grep 2406
-        openfoam icoFoam -help | grep 2406
+        openfoam-version: 2412
     - name: Test OpenFOAM v2412
-      run: openfoam2412 icoFoam -help | grep 2412
+      run: |
+        icoFoam -help | grep 2412
+        openfoam icoFoam -help | grep 2412
+    - name: Test OpenFOAM v2506
+      run: openfoam2506 icoFoam -help | grep 2506
