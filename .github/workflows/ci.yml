@@ -109,21 +109,21 @@ jobs:
             openfoam-version: 10
           - os: macos-14
             openfoam-version: 9
-          - os: macos-13
+          - os: macos-15-intel
             openfoam-version: 2106
-          - os: macos-13
+          - os: macos-15-intel
             openfoam-version: 2012
-          - os: macos-13
+          - os: macos-15-intel
             openfoam-version: 2006
-          - os: macos-13
+          - os: macos-15-intel
             openfoam-version: 13
-          - os: macos-13
+          - os: macos-15-intel
             openfoam-version: 12
-          - os: macos-13
+          - os: macos-15-intel
             openfoam-version: 11
-          - os: macos-13
+          - os: macos-15-intel
             openfoam-version: 10
-          - os: macos-13
+          - os: macos-15-intel
             openfoam-version: 9
     steps:
     - name: Checkout
