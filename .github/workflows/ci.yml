@@ -127,7 +127,7 @@ jobs:
             openfoam-version: 9
     steps:
     - name: Checkout
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
     - name: Set up OpenFOAM ${{ matrix.openfoam-version }}
       uses: ./
       with:
@@ -246,7 +246,7 @@ jobs:
             openfoam-version: 7
     steps:
     - name: Checkout
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
     - name: Set up OpenFOAM ${{ matrix.openfoam-version }}
       uses: ./
       with:
@@ -265,7 +265,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
     - name: Checkout
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
     - name: Set up OpenFOAM 2506
       uses: ./
       with:
