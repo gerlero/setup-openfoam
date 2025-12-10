@@ -24,7 +24,7 @@ steps:
 strategy:
   matrix:
     openfoam-version: [12, 13, 2412, 2506]  # Add other versions here if needed
-  fail-fast: true
+  fail-fast: false
 steps:
 - uses: actions/checkout@v4
 - name: Set up OpenFOAM
