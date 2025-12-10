@@ -262,15 +262,15 @@ jobs:
       run: . $WM_DIR/scripts/AllwmakeParseArguments
 
   multiple-installs:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v6
-    - name: Set up OpenFOAM 2506
+    - name: Set up OpenFOAM v2506
       uses: ./
       with:
         openfoam-version: 2506
-    - name: Set up OpenFOAM 2406
+    - name: Set up OpenFOAM v2412
       uses: ./
       with:
         openfoam-version: 2412
