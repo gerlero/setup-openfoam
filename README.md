@@ -57,7 +57,7 @@ Whether to cache the OpenFOAM installation between runs. Default: `true`.
 
 - **`macos-15`**, **`macos-14`**: 2512, 2506, 2412, 2406, 2312, 2306, 2212, 2206, 2112 (via [OpenFOAM.app](https://github.com/gerlero/openfoam-app))
 
-- **`macos-15-intel`**: 2506, 2412, 2406, 2312, 2306, 2212, 2206, 2112 (via [OpenFOAM.app](https://github.com/gerlero/openfoam-app))
+- **`macos-15-intel`**: 2412, 2406, 2312, 2306, 2212, 2206, 2112 (via [OpenFOAM.app](https://github.com/gerlero/openfoam-app))
 
 - [Docker `container`](https://docs.github.com/en/actions/writing-workflows/choosing-where-your-workflow-runs/running-jobs-in-a-container) based on:
 
