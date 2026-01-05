@@ -113,6 +113,8 @@ jobs:
           - os: macos-15-intel
             openfoam-version: 2512
           - os: macos-15-intel
+            openfoam-version: 2506
+          - os: macos-15-intel
             openfoam-version: 2106
           - os: macos-15-intel
             openfoam-version: 2012
