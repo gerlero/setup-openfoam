@@ -13,7 +13,7 @@ steps:
 - uses: actions/checkout@v4
 - uses: gerlero/setup-openfoam@v1
   with:
-    openfoam-version: 2506
+    openfoam-version: 2512
 - run: blockMesh
 - run: icoFoam
 ```
@@ -23,7 +23,7 @@ steps:
 ```yaml
 strategy:
   matrix:
-    openfoam-version: [12, 13, 2412, 2506]  # Add other versions here if needed
+    openfoam-version: [12, 13, 2506, 2512]  # Add other versions here if needed
   fail-fast: false
 steps:
 - uses: actions/checkout@v4
@@ -47,23 +47,25 @@ Whether to cache the OpenFOAM installation between runs. Default: `true`.
 
 ## Available OpenFOAM versions by runner OS
 
-- **`ubuntu-24.04`**: 2506, 2412, 2406, 2312, 2306, 2212 (openfoam.com), 13, 12, 11 (openfoam.org)
+- **`ubuntu-24.04`**: 2512, 2506, 2412, 2406, 2312, 2306, 2212 (openfoam.com), 13, 12, 11 (openfoam.org)
 
-- **`ubuntu-22.04`**: 2506, 2412, 2406, 2312, 2306, 2212, 2206, 2112, 2106, 2012, 2006 (openfoam.com), 13, 12, 11, 10, 9 (openfoam.org)
+- **`ubuntu-22.04`**: 2512, 2506, 2412, 2406, 2312, 2306, 2212, 2206, 2112, 2106, 2012, 2006 (openfoam.com), 13, 12, 11, 10, 9 (openfoam.org)
 
-- **`ubuntu-24.04-arm`**: 2506, 2412, 2406, 2312, 2306, 2212 (openfoam.com), 13, 12, 11 (openfoam.org)
+- **`ubuntu-24.04-arm`**: 2512, 2506, 2412, 2406, 2312, 2306, 2212 (openfoam.com), 13, 12, 11 (openfoam.org)
 
-- **`ubuntu-22.04-arm`**: 2506, 2412, 2406, 2312, 2306, 2212, 2206, 2112, 2106, 2006 (openfoam.com), 13, 12, 11 (openfoam.org)
+- **`ubuntu-22.04-arm`**: 2512, 2506, 2412, 2406, 2312, 2306, 2212, 2206, 2112, 2106, 2006 (openfoam.com), 13, 12, 11 (openfoam.org)
 
-- **`macos-15`**, **`macos-14`**, **`macos-15-intel`**: 2506, 2412, 2406, 2312, 2306, 2212, 2206, 2112 (via [OpenFOAM.app](https://github.com/gerlero/openfoam-app))
+- **`macos-15`**, **`macos-14`**: 2512, 2506, 2412, 2406, 2312, 2306, 2212, 2206, 2112 (via [OpenFOAM.app](https://github.com/gerlero/openfoam-app))
+
+- **`macos-15-intel`**: 2412, 2406, 2312, 2306, 2212, 2206, 2112 (via [OpenFOAM.app](https://github.com/gerlero/openfoam-app))
 
 - [Docker `container`](https://docs.github.com/en/actions/writing-workflows/choosing-where-your-workflow-runs/running-jobs-in-a-container) based on:
 
-  - `ubuntu:24.04`: 2506, 2412, 2406, 2312, 2306, 2212 (openfoam.com), 13, 12, 11 (openfoam.org)
+  - `ubuntu:24.04`: 2512, 2506, 2412, 2406, 2312, 2306, 2212 (openfoam.com), 13, 12, 11 (openfoam.org)
 
-  - `ubuntu:22.04`: 2506, 2412, 2406, 2312, 2306, 2212, 2206, 2112, 2106, 2012, 2006 (openfoam.com), 13, 12, 11, 10, 9 (openfoam.org)
+  - `ubuntu:22.04`: 2512, 2506, 2412, 2406, 2312, 2306, 2212, 2206, 2112, 2106, 2012, 2006 (openfoam.com), 13, 12, 11, 10, 9 (openfoam.org)
 
-  - `ubuntu:20.04`: 2506, 2412, 2406, 2312, 2306, 2212, 2206, 2112, 2106, 2012, 2006 (openfoam.com), 12, 11, 10, 9, 8, 7 (openfoam.org)
+  - `ubuntu:20.04`: 2512, 2506, 2412, 2406, 2312, 2306, 2212, 2206, 2112, 2106, 2012, 2006 (openfoam.com), 12, 11, 10, 9, 8, 7 (openfoam.org)
 
   - `debian:bookworm`: 2312, 2212, 2206, 2112, 2106, 2006 (openfoam.com)
 
