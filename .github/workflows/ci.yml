@@ -61,6 +61,14 @@ jobs:
           - os: ubuntu-24.04
             openfoam-version: 9
           - os: ubuntu-24.04-arm
+            openfoam-version: 2406
+          - os: ubuntu-24.04-arm
+            openfoam-version: 2312
+          - os: ubuntu-24.04-arm
+            openfoam-version: 2306
+          - os: ubuntu-24.04-arm
+            openfoam-version: 2212
+          - os: ubuntu-24.04-arm
             openfoam-version: 2206
           - os: ubuntu-24.04-arm
             openfoam-version: 2112
@@ -75,7 +83,21 @@ jobs:
           - os: ubuntu-24.04-arm
             openfoam-version: 9
           - os: ubuntu-22.04-arm
+            openfoam-version: 2312
+          - os: ubuntu-22.04-arm
+            openfoam-version: 2306
+          - os: ubuntu-22.04-arm
+            openfoam-version: 2212
+          - os: ubuntu-22.04-arm
+            openfoam-version: 2206
+          - os: ubuntu-22.04-arm
+            openfoam-version: 2112
+          - os: ubuntu-22.04-arm
+            openfoam-version: 2106
+          - os: ubuntu-22.04-arm
             openfoam-version: 2012
+          - os: ubuntu-22.04-arm
+            openfoam-version: 2006
           - os: ubuntu-22.04-arm
             openfoam-version: 10
           - os: ubuntu-22.04-arm
