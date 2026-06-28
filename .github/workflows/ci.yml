@@ -284,18 +284,6 @@ jobs:
           - container: ubuntu:20.04
             openfoam-version: 13
           - container: debian:bookworm
-            openfoam-version: 2512
-          - container: debian:bookworm
-            openfoam-version: 2506
-          - container: debian:bookworm
-            openfoam-version: 2412
-          - container: debian:bookworm
-            openfoam-version: 2406
-          - container: debian:bookworm
-            openfoam-version: 2306
-          - container: debian:bookworm
-            openfoam-version: 2012
-          - container: debian:bookworm
             openfoam-version: 13
           - container: debian:bookworm
             openfoam-version: 12
@@ -309,16 +297,6 @@ jobs:
             openfoam-version: 8
           - container: debian:bookworm
             openfoam-version: 7
-          - container: debian:bullseye
-            openfoam-version: 2512
-          - container: debian:bullseye
-            openfoam-version: 2506
-          - container: debian:bullseye
-            openfoam-version: 2412
-          - container: debian:bullseye
-            openfoam-version: 2406
-          - container: debian:bullseye
-            openfoam-version: 2306
           - container: debian:bullseye
             openfoam-version: 13
           - container: debian:bullseye
