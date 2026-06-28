@@ -230,12 +230,35 @@ jobs:
           - 8
           - 7
         container:
+          - ubuntu:26.04
           - ubuntu:24.04
           - ubuntu:22.04
           - ubuntu:20.04
           - debian:bookworm
           - debian:bullseye
         exclude:
+          - container: ubuntu:26.04
+            openfoam-version: 2206
+          - container: ubuntu:26.04
+            openfoam-version: 2112
+          - container: ubuntu:26.04
+            openfoam-version: 2106
+          - container: ubuntu:26.04
+            openfoam-version: 2012
+          - container: ubuntu:26.04
+            openfoam-version: 2006
+          - container: ubuntu:26.04
+            openfoam-version: 12
+          - container: ubuntu:26.04
+            openfoam-version: 11
+          - container: ubuntu:26.04
+            openfoam-version: 10
+          - container: ubuntu:26.04
+            openfoam-version: 9
+          - container: ubuntu:26.04
+            openfoam-version: 8
+          - container: ubuntu:26.04
+            openfoam-version: 7
           - container: ubuntu:24.04
             openfoam-version: 2206
           - container: ubuntu:24.04
