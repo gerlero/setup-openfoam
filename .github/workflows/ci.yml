@@ -234,6 +234,7 @@ jobs:
           - ubuntu:24.04
           - ubuntu:22.04
           - ubuntu:20.04
+          - debian:trixie
           - debian:bookworm
           - debian:bullseye
         exclude:
@@ -283,6 +284,20 @@ jobs:
             openfoam-version: 7
           - container: ubuntu:20.04
             openfoam-version: 13
+          - container: debian:trixie
+            openfoam-version: 13
+          - container: debian:trixie
+            openfoam-version: 12
+          - container: debian:trixie
+            openfoam-version: 11
+          - container: debian:trixie
+            openfoam-version: 10
+          - container: debian:trixie
+            openfoam-version: 9
+          - container: debian:trixie
+            openfoam-version: 8
+          - container: debian:trixie
+            openfoam-version: 7
           - container: debian:bookworm
             openfoam-version: 13
           - container: debian:bookworm
