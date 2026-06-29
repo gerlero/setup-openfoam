@@ -10,7 +10,7 @@ Installs and activates a specific version of OpenFOAM in the GitHub Actions envi
 
 ```yaml
 steps:
-- uses: actions/checkout@v4
+- uses: actions/checkout@v7
 - uses: gerlero/setup-openfoam@v1
   with:
     openfoam-version: 2512
