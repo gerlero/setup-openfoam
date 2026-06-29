@@ -26,7 +26,7 @@ strategy:
     openfoam-version: [12, 13, 2506, 2512]  # Add other versions here if needed
   fail-fast: false
 steps:
-- uses: actions/checkout@v4
+- uses: actions/checkout@v7
 - name: Set up OpenFOAM
   uses: gerlero/setup-openfoam@v1
   with:
