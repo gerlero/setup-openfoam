@@ -69,6 +69,8 @@ Whether to cache the OpenFOAM installation between runs. Default: `true`.
 
   - `ubuntu:20.04`: 2512, 2506, 2412, 2406, 2312, 2306, 2212, 2206, 2112, 2106, 2012, 2006 (openfoam.com), 12, 11, 10, 9, 8, 7 (openfoam.org)
 
+  - `debian:trixie`: 2512, 2506, 2412, 2406, 2312, 2306, 2212, 2206, 2112, 2106, 2006 (openfoam.com)
+  
   - `debian:bookworm`: 2512, 2506, 2412, 2406, 2312, 2306, 2212, 2206, 2112, 2106, 2006 (openfoam.com)
 
   - `debian:bullseye`: 2512, 2506, 2412, 2406, 2312, 2306, 2212, 2206, 2112, 2106, 2012, 2006 (openfoam.com)
