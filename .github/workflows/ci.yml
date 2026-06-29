@@ -18,6 +18,7 @@ jobs:
       fail-fast: false
       matrix:
         openfoam-version:
+          - 2606
           - 2512
           - 2506
           - 2412
@@ -151,6 +152,8 @@ jobs:
           - os: macos-14
             openfoam-version: 9
           - os: macos-26-intel
+            openfoam-version: 2606
+          - os: macos-26-intel
             openfoam-version: 2512
           - os: macos-26-intel
             openfoam-version: 2106
@@ -168,6 +171,8 @@ jobs:
             openfoam-version: 10
           - os: macos-26-intel
             openfoam-version: 9
+          - os: macos-15-intel
+            openfoam-version: 2606
           - os: macos-15-intel
             openfoam-version: 2512
           - os: macos-15-intel
@@ -210,6 +215,7 @@ jobs:
       fail-fast: false
       matrix:
         openfoam-version:
+          - 2606
           - 2512
           - 2506
           - 2412
@@ -348,17 +354,17 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v7
+    - name: Set up OpenFOAM v2606
+      uses: ./
+      with:
+        openfoam-version: 2606
     - name: Set up OpenFOAM v2512
       uses: ./
       with:
         openfoam-version: 2512
-    - name: Set up OpenFOAM v2506
-      uses: ./
-      with:
-        openfoam-version: 2506
-    - name: Test OpenFOAM v2506
-      run: |
-        icoFoam -help | grep 2506
-        openfoam icoFoam -help | grep 2506
     - name: Test OpenFOAM v2512
-      run: openfoam2512 icoFoam -help | grep 2512
+      run: |
+        icoFoam -help | grep 2512
+        openfoam icoFoam -help | grep 2512
+    - name: Test OpenFOAM v2606
+      run: openfoam2606 icoFoam -help | grep 2606
