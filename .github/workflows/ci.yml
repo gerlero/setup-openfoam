@@ -290,7 +290,6 @@ jobs:
           - ubuntu:20.04
           - debian:trixie
           - debian:bookworm
-          - debian:bullseye
         exclude:
           - container: ubuntu:26.04
             openfoam-version: 2206
@@ -371,22 +370,6 @@ jobs:
           - container: debian:bookworm
             openfoam-version: 8
           - container: debian:bookworm
-            openfoam-version: 7
-          - container: debian:bullseye
-            openfoam-version: 14
-          - container: debian:bullseye
-            openfoam-version: 13
-          - container: debian:bullseye
-            openfoam-version: 12
-          - container: debian:bullseye
-            openfoam-version: 11
-          - container: debian:bullseye
-            openfoam-version: 10
-          - container: debian:bullseye
-            openfoam-version: 9
-          - container: debian:bullseye
-            openfoam-version: 8
-          - container: debian:bullseye
             openfoam-version: 7
     steps:
     - name: Checkout
