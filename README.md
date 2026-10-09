@@ -59,7 +59,7 @@ Whether to cache the OpenFOAM installation between runs. Default: `true`.
 
 - **`ubuntu-22.04-arm`**: 2606, 2512, 2506, 2412, 2406 (openfoam.com); 14, 13, 12, 11 (openfoam.org)
 
-- **`macos-26`**, **`macos-15`**, **`macos-14`**: 2606, 2512, 2506, 2412, 2406, 2312, 2306, 2212, 2206, 2112 (via [OpenFOAM.app](https://github.com/gerlero/openfoam-app))
+- **`macos-26`**, **`macos-15`**: 2606, 2512, 2506, 2412, 2406, 2312, 2306, 2212, 2206, 2112 (via [OpenFOAM.app](https://github.com/gerlero/openfoam-app))
 
 - **`macos-26-intel`**, **`macos-15-intel`**: 2506, 2412, 2406, 2312, 2306, 2212, 2206, 2112 (via [OpenFOAM.app](https://github.com/gerlero/openfoam-app))
 
