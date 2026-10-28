@@ -53,7 +53,7 @@ Whether to cache the OpenFOAM installation between runs. Default: `true`.
 
 - **`ubuntu-22.04`**: 2606, 2512, 2506, 2412, 2406, 2312, 2306, 2212, 2206, 2112, 2106, 2012, 2006 (openfoam.com); 14, 13, 12, 11, 10, 9 (openfoam.org)
 
-- **`ubuntu-26.04-arm`**: 2606, 2512, 2506, 2412, 2406, 2312, 2306, 2212 (openfoam.com); 14, 13 (openfoam.org)
+- **`ubuntu-26.04-arm`**: 2606, 2512, 2506, 2412 (openfoam.com); 14, 13 (openfoam.org)
 
 - **`ubuntu-24.04-arm`**: 2606, 2512, 2506, 2412 (openfoam.com); 14, 13, 12, 11 (openfoam.org)
 
