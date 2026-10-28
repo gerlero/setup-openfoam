@@ -22,6 +22,10 @@ runs:
           echo "apt-repository=http://dl.openfoam.org/ubuntu" >> "$GITHUB_OUTPUT"
           echo "apt-key=$GITHUB_ACTION_PATH/gpg.key" >> "$GITHUB_OUTPUT"
           echo "apt-package=openfoam${{ inputs.openfoam-version }}" >> "$GITHUB_OUTPUT"
+          if [ "$(uname -m)" == "x86_64" ]; then
+            # See https://openfoam.org/download/14-ubuntu/
+            echo "apt-architectures=amd64" >> "$GITHUB_OUTPUT"
+          fi
           echo "openfoam-etc=/opt/openfoam${{ inputs.openfoam-version }}/etc" >> "$GITHUB_OUTPUT"
         else
           echo "apt-repository=https://dl.openfoam.com/repos/deb" >> "$GITHUB_OUTPUT"
@@ -36,6 +40,7 @@ runs:
       with:
         uri: ${{ steps.prep.outputs.apt-repository }}
         key: ${{ steps.prep.outputs.apt-key }}
+        architectures: ${{ steps.prep.outputs.apt-architectures }}
         cache: ${{ inputs.cache == 'true' }}
     - name: Install OpenFOAM on Linux
       if: steps.prep.outputs.apt-package
