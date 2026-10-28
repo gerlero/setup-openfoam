@@ -20,7 +20,8 @@ runs:
           echo "openfoam-etc=/Applications/OpenFOAM-v${{ inputs.openfoam-version }}.app/Contents/Resources/etc" >> "$GITHUB_OUTPUT"
         elif [ ${{ inputs.openfoam-version }} -lt 1000 ]; then
           echo "apt-repository=http://dl.openfoam.org/ubuntu" >> "$GITHUB_OUTPUT"
-          echo "apt-key=$GITHUB_ACTION_PATH/gpg.key" >> "$GITHUB_OUTPUT"
+          # Signing key from https://dl.openfoam.org/gpg.key
+          echo "apt-key=$GITHUB_ACTION_PATH/openfoam-org.asc" >> "$GITHUB_OUTPUT"
           echo "apt-package=openfoam${{ inputs.openfoam-version }}" >> "$GITHUB_OUTPUT"
           if [ "$(uname -m)" == "x86_64" ]; then
             # See https://openfoam.org/download/14-ubuntu/
@@ -29,7 +30,8 @@ runs:
           echo "openfoam-etc=/opt/openfoam${{ inputs.openfoam-version }}/etc" >> "$GITHUB_OUTPUT"
         else
           echo "apt-repository=https://dl.openfoam.com/repos/deb" >> "$GITHUB_OUTPUT"
-          echo "apt-key=$GITHUB_ACTION_PATH/pubkey.gpg" >> "$GITHUB_OUTPUT"
+          # Signing key from https://dl.openfoam.com/pubkey.gpg
+          echo "apt-key=$GITHUB_ACTION_PATH/openfoam-com.asc" >> "$GITHUB_OUTPUT"
           echo "apt-package=openfoam${{ inputs.openfoam-version }}-default" >> "$GITHUB_OUTPUT"
           echo "openfoam-etc=/usr/lib/openfoam/openfoam${{ inputs.openfoam-version }}/etc" >> "$GITHUB_OUTPUT"
         fi
