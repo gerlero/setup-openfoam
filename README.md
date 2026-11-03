@@ -69,13 +69,13 @@ Whether to cache the OpenFOAM installation between runs. Default: `true`.
 
   - `ubuntu:24.04`: 2606, 2512, 2506, 2412, 2406, 2312, 2306, 2212 (openfoam.com); 14, 13, 12, 11 (openfoam.org)
 
-  - `ubuntu:22.04`: 2606, 2512, 2506, 2412, 2406, 2312, 2306, 2212 (openfoam.com); 14, 13, 12, 11 (openfoam.org)
+  - `ubuntu:22.04`: 2606, 2512, 2506, 2412, 2406, 2312, 2306, 2212, 2206, 2112, 2106, 2012, 2006 (openfoam.com); 14, 13, 12, 11, 10, 9 (openfoam.org)
 
-  - `ubuntu:20.04`: 2606, 2512, 2506, 2412, 2406, 2312, 2306, 2212, 2206, 2112, 2106, 2012, 2006 (openfoam.com); 12, 11, 10, 9 (openfoam.org)
+  - `ubuntu:20.04`: 2606, 2512, 2506, 2412, 2406, 2312, 2306, 2212, 2206, 2112, 2106, 2012, 2006 (openfoam.com); 12, 11, 10, 9, 8, 7 (openfoam.org)
 
-  - `debian:trixie`: 2606, 2512, 2506, 2412, 2406, 2312, 2306, 2212, 2206, 2112, 2106, 2006 (openfoam.com)
+  - `debian:trixie`: 2606, 2512, 2506, 2412, 2406, 2312, 2306, 2212, 2206, 2112, 2106, 2012, 2006 (openfoam.com)
 
-  - `debian:bookworm`: 2606, 2512, 2506, 2412, 2406, 2312, 2306, 2212, 2206, 2112, 2106, 2006 (openfoam.com)
+  - `debian:bookworm`: 2606, 2512, 2506, 2412, 2406, 2312, 2306, 2212, 2206, 2112, 2106, 2012, 2006 (openfoam.com)
 
 - Windows: not supported
 
