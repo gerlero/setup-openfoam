@@ -67,7 +67,7 @@ jobs:
             openfoam-version: 10
           - os: ubuntu-26.04
             openfoam-version: 9
-          - os: ubuntu-26.04
+          - os: ubuntu-24.04
             openfoam-version: 2206
           - os: ubuntu-24.04
             openfoam-version: 2112
